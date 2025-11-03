@@ -9,25 +9,14 @@ class VilleFranceFree extends Model
 {
     use HasFactory;
 
-    // Nom exact de la table
     protected $table = 'villes_france_free';
 
     // Si ta table n’a pas de colonnes created_at / updated_at :
     public $timestamps = false;
 
-    // Si ta clé primaire n’est pas "id", indique-la ici
-    // Par exemple, si c’est "ville_id"
     protected $primaryKey = 'ville_id';
 
-    // Si la clé n’est pas auto-incrémentée :
-    // public $incrementing = false;
-
-    // Si la clé est une chaîne (pas un entier) :
-    // protected $keyType = 'string';
-
-    // Liste des colonnes modifiables (facultatif mais recommandé)
     protected $fillable = [
-        'ville_id',
         'ville_departement',
         'ville_slug',
         'ville_nom',
@@ -53,7 +42,5 @@ class VilleFranceFree extends Model
         'ville_latitude_dms',
         'ville_zmin',
         'ville_zmax'
-
-        // ajoute ici les noms exacts des colonnes de ta table
     ];
 }
