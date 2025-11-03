@@ -4,17 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\VilleFranceFree;
 use Illuminate\Http\Request;
-// Remplacez 'Collection' par 'LengthAwarePaginator' pour une meilleure déclaration de type
-use Illuminate\Contracts\Pagination\LengthAwarePaginator; 
+use Illuminate\Contracts\View\View; // Importation pour l'indication de type de retour
 
 class VilleFranceFreeController extends Controller
 {
     /**
-     * Affiche une liste paginée des villes, avec une option de recherche.
+     * Affiche l'interface de recherche et les résultats paginés.
      * @param Request $request
-     * @return LengthAwarePaginator 
+     * @return View
      */
-    public function index(Request $request): LengthAwarePaginator // <-- Changement ici
+    public function index(Request $request): View // <-- Retourne une Vue
     {
         // 1. Récupérer le terme de recherche 'q' de l'URL
         $search = $request->input('q');
@@ -24,14 +23,19 @@ class VilleFranceFreeController extends Controller
 
         $query = VilleFranceFree::query();
 
-        // 2. Appliquer la clause WHERE si un terme de recherche est présent
+        // 2. Appliquer la recherche (si 'q' est présent)
         if ($search) {
             $query->where('ville_nom', 'LIKE', "%{$search}%")
                   ->orWhere('ville_code_postal', 'LIKE', "{$search}%"); 
         }
 
-        // 3. Appliquer la pagination au lieu de récupérer TOUS les résultats
-        // Le paramètre 'q' est automatiquement géré par paginate()
-        return $query->paginate($perPage); // <-- Changement clé ici: utilisation de paginate()
+        // 3. Exécuter la requête paginée
+        $villes = $query->paginate($perPage)->withQueryString(); // withQueryString maintient le 'q=' dans les liens de pagination
+
+        // 4. Retourner la vue en lui passant les données
+        return view('villes.recherche', [ // <-- Renvoie la vue 'resources/views/villes/recherche.blade.php'
+            'villes' => $villes,
+            'searchQuery' => $search // Pour pré-remplir la barre de recherche
+        ]);
     }
 }
