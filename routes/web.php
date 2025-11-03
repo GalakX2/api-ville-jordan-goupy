@@ -17,6 +17,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 
-Route::get('/api/villes', [VilleFranceFreeController::class, 'index']);
+Route::get(uri: '/api/villes', action: [VilleFranceFreeController::class, 'index']);
 
 require __DIR__.'/settings.php';
